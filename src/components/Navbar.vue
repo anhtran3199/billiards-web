@@ -7,6 +7,9 @@
           <li class="nav-item">
             <a href="/#/login" class="nav-link">Login</a>
           </li>
+          <li class="nav-item">
+            <a href="/#/register" class="nav-link">Register</a>
+          </li>
         </ul>
       </div>
     </div>
@@ -20,4 +23,8 @@ export default {
 </script>
 
 <style>
+.navbar-collapse {
+    display: flex;
+    justify-content: flex-end;
+}
 </style>
