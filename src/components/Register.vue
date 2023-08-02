@@ -3,34 +3,23 @@
     <div class="container py-5 h-100">
       <div class="row justify-content-center align-items-center h-100">
         <div class="col-12 col-lg-9 col-xl-7 custom-wrap">
-          <div
-            class="card shadow-2-strong card-registration"
-            style="
+          <div class="card shadow-2-strong card-registration" style="
               border-radius: 15px;
               background-color: rgba(255, 255, 255, 0.8) !important;
-            "
-          >
+            ">
             <div class="card-body p-4 p-md-5">
               <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Registration Form</h3>
               <form @submit.prevent="handleRegistration">
                 <div class="row">
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input
-                        type="text"
-                        v-model="username"
-                        class="form-control form-control-lg"
-                      />
+                      <input type="text" v-model="username" class="form-control form-control-lg" />
                       <label class="form-label" for="username">Username</label>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input
-                        type="text"
-                        v-model="fullName"
-                        class="form-control form-control-lg"
-                      />
+                      <input type="text" v-model="fullName" class="form-control form-control-lg" />
                       <label class="form-label" for="fullName">Full name</label>
                     </div>
                   </div>
@@ -39,23 +28,13 @@
                 <div class="row">
                   <div class="col-md-6 mb-4 d-flex align-items-center">
                     <div class="form-outline w-100">
-                      <input
-                        type="text"
-                        class="form-control form-control-lg"
-                        v-model="aliasName"
-                      />
-                      <label for="aliasName" class="form-label"
-                        >Alias name</label
-                      >
+                      <input type="text" class="form-control form-control-lg" v-model="aliasName" />
+                      <label for="aliasName" class="form-label">Alias name</label>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4">
                     <div class="form-outline">
-                      <input
-                        type="password"
-                        v-model="password"
-                        class="form-control form-control-lg"
-                      />
+                      <input type="password" v-model="password" class="form-control form-control-lg" />
                       <label class="form-label" for="password">Password</label>
                     </div>
                   </div>
@@ -63,21 +42,13 @@
                 <div class="row">
                   <div class="col-md-6 mb-4 pb-2">
                     <div class="form-outline">
-                      <input
-                        type="email"
-                        v-model="email"
-                        class="form-control form-control-lg"
-                      />
+                      <input type="email" v-model="email" class="form-control form-control-lg" />
                       <label class="form-label" for="email">Email</label>
                     </div>
                   </div>
                   <div class="col-md-6 mb-4 pb-2">
                     <div class="form-outline">
-                      <input
-                        type="tel"
-                        v-model="phone"
-                        class="form-control form-control-lg"
-                      />
+                      <input type="tel" v-model="phone" class="form-control form-control-lg" />
                       <label class="form-label" for="phone">Phone Number</label>
                     </div>
                   </div>
@@ -90,20 +61,12 @@
                       <option value="ROLE_USER">User</option>
                       <option value="ROLE_ADMIN">Admin</option>
                     </select>
-                    <label
-                      class="form-label select-label"
-                      style="margin-left: 10px"
-                      >User role</label
-                    >
+                    <label class="form-label select-label" style="margin-left: 10px">User role</label>
                   </div>
                 </div>
 
                 <div class="mt-4 pt-2">
-                  <input
-                    class="btn btn-primary btn-lg"
-                    type="submit"
-                    value="Submit"
-                  />
+                  <input class="btn btn-primary btn-lg" type="submit" value="Submit" />
                 </div>
               </form>
             </div>
@@ -137,8 +100,8 @@ export default {
     };
   },
   methods: {
-    handleRegistration() {
-      const data = {
+    async handleRegistration() {
+      const response = await axios.post("/auth/sign-up", {
         username: this.username,
         fullName: this.fullName,
         aliasName: this.aliasName,
@@ -146,11 +109,9 @@ export default {
         email: this.email,
         phone: this.phone,
         role: this.role,
-      };
-      axios.post("http://localhost:8080/api/auth/sign-up", data).then((res) => {
-        console.log(res);
-      });
-      console.log(data);
+      })
+      this.$router.push('/');
+      return response
     },
   },
 };
@@ -163,18 +124,14 @@ export default {
   background: rgb(154, 218, 238);
 
   /* Chrome 10-25, Safari 5.1-6 */
-  background: -webkit-linear-gradient(
-    to bottom right,
-    rgb(154, 218, 238),
-    rgb(43, 70, 221)
-  );
+  background: -webkit-linear-gradient(to bottom right,
+      rgb(154, 218, 238),
+      rgb(43, 70, 221));
 
   /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-  background: linear-gradient(
-    to bottom right,
-    rgb(154, 218, 238),
-    rgb(43, 70, 221)
-  );
+  background: linear-gradient(to bottom right,
+      rgb(154, 218, 238),
+      rgb(43, 70, 221));
 }
 
 .card-registration .select-input.form-control[readonly]:not([disabled]) {

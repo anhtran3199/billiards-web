@@ -1,6 +1,6 @@
 <template>
-  <section class="ftco-section">
-    <div class="container">
+  <section class="vh-100 gradient-custom login-background">
+    <div class="container py-5 h-100">
       <div class="row justify-content-center">
         <div class="col-md-6 text-center mb-5">
         </div>
@@ -12,13 +12,13 @@
               <span class="fa fa-user-o"></span>
             </div>
             <h3 class="text-center mb-4">Sign In</h3>
-            <form action="#" class="login-form">
+            <form @submit.prevent="handleLogin" class="login-form">
               <div class="form-outline">
-                <input type="username" id="phone" class="form-control form-control-lg" />
+                <input type="username" v-model="username" class="form-control form-control-lg" />
                 <label class="form-label" for="phone">Username</label>
               </div>
               <div class="form-outline mt-2">
-                <input type="password" id="password" class="form-control form-control-lg" />
+                <input type="password" v-model="password" class="form-control form-control-lg" />
                 <label class="form-label" for="phone">Password</label>
               </div>
               <div class="form-group">
@@ -46,22 +46,41 @@
 </template>
 
 <script>
+import axios from 'axios';
 export default {
   name: "Login",
+  data() {
+    return {
+      username: '',
+      password: ''
+    }
+  },
   mounted() {
-    // if (document.getElementById('mdb-script')) return; // was already loaded
+    if (document.getElementById('mdb-script')) return; // was already loaded
     var scriptTag = document.createElement("script");
     scriptTag.src = "https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.1/mdb.min.js";
     scriptTag.id = "mdb-script";
     document.getElementsByTagName('head')[0].appendChild(scriptTag);
+  },
+  methods: {
+    async handleLogin() {
+      const response = await axios.post("/auth/login", {
+        username: this.username,
+        password: this.password
+      })
+      localStorage.setItem('authorization', JSON.stringify(response))
+      this.$router.push('/')
+      this.$router.go(0)
+      return response
+    }
   }
 };
 </script>
 
 <style>
 .login-wrap {
-  margin-top: 50%;
-  margin-bottom: 52%;
+  margin-top: 40%;
+  margin-bottom: 40%;
   background-color: rgba(255, 255, 255, 0.6) !important;
   border-radius: 20px;
 }
@@ -69,5 +88,13 @@ export default {
 .submit {
   margin-top: 20px;
   margin-bottom: 20px;
+}
+.login-background {
+  background: rgb(34, 193, 195);
+  background: linear-gradient(
+    0deg,
+    rgba(34, 193, 195, 1) 0%,
+    rgba(253, 187, 45, 1) 100%
+  ) !important;
 }
 </style>
