@@ -12,7 +12,8 @@
               <span class="fa fa-user-o"></span>
             </div>
             <h3 class="text-center mb-4">Sign In</h3>
-            <form @submit.prevent="handleLogin" class="login-form">
+            <!-- <form @submit.prevent="handleLogin" class="login-form"> -->
+            <div class="login-form">
               <div class="form-outline">
                 <input type="username" v-model="username" class="form-control form-control-lg" />
                 <label class="form-label" for="phone">Username</label>
@@ -21,9 +22,15 @@
                 <input type="password" v-model="password" class="form-control form-control-lg" />
                 <label class="form-label" for="phone">Password</label>
               </div>
+              <div>
+                <p v-show="message" style="color: red">{{ this.message }}</p>
+              </div>
               <div class="form-group">
-                <button type="submit" class="form-control btn btn-primary rounded submit px-3">
+                <button @click="handleLogin" class="form-control btn btn-primary rounded submit px-3">
                   Login
+                </button>
+                <button @click="handleSignUp" class="form-control btn btn-primary rounded submit px-3">
+                  Sign up
                 </button>
               </div>
               <div class="form-group d-md-flex">
@@ -37,7 +44,7 @@
                   <a href="#">Forgot Password</a>
                 </div>
               </div>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -52,7 +59,8 @@ export default {
   data() {
     return {
       username: '',
-      password: ''
+      password: '',
+      message: '',
     }
   },
   mounted() {
@@ -63,15 +71,42 @@ export default {
     document.getElementsByTagName('head')[0].appendChild(scriptTag);
   },
   methods: {
+
     async handleLogin() {
-      const response = await axios.post("/auth/login", {
-        username: this.username,
-        password: this.password
-      })
-      localStorage.setItem('authorization', JSON.stringify(response))
+      try {
+        const response = await axios.post("/auth/login", {
+          username: this.username,
+          password: this.password
+        });
+        this.saveAuthorization(response)
+        this.redirectToHomePage()
+      } catch(error) {
+        this.handleError(error)
+      }
+    },
+    async handleSignUp() {
+      try {
+        const response = await axios.post("/auth/sign-up", {
+          username: this.username,
+          password: this.password,
+          fullName: "Default name"
+        });
+        this.saveAuthorization(response)
+        this.redirectToHomePage()
+      } catch(error) {
+        this.handleError(error)
+      }
+    },
+
+    redirectToHomePage() {
       this.$router.push('/')
       this.$router.go(0)
-      return response
+    },
+    saveAuthorization(authorization) {
+      localStorage.setItem('authorization', JSON.stringify(authorization))
+    },
+    handleError(error) {
+      this.message = error.response.data.message
     }
   }
 };
